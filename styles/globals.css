@@ -1,9 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: 'Roboto Slab', serif;
+}
+
+h1 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
 }
 
 a {
@@ -13,4 +22,5 @@ a {
 
 * {
   box-sizing: border-box;
+  font-family: 'Roboto Slab', serif;
 }
