@@ -13,11 +13,11 @@ export default function Home() {
   let loginAlert
   let loginButton
   if (session) {
-    loginButton = <Button className={styles.headerButton} onClick={() => signOut('google')}><i className={styles.headerIcon + " fas fa-sign-in-alt"} /></Button>
+    loginButton = <Button className={styles.headerButton} onClick={() => signOut('google')}><i aria-hidden className={styles.headerIcon + " fas fa-sign-in-alt"} /></Button>
   }
   else {
     loginAlert = <p id={styles.loginAlert}>Change anything. <Button className={styles.signInButton} onClick={() => signIn('google')}>Sign in</Button> to save</p>
-    loginButton = <Button className={styles.headerButton} onClick={() => signIn('google')}><i className={styles.headerIcon + " fab fa-google"} /></Button>
+    loginButton = <Button className={styles.headerButton} onClick={() => signIn('google')}><i aria-hidden className={styles.headerIcon + " fab fa-google"} /></Button>
   }
   let settings = <Settings session={session} setModal={setModal} />
 
@@ -30,8 +30,8 @@ export default function Home() {
       <h1>planwisely</h1>
       {loginAlert}
       <div>
-        <Button className={styles.headerButton} onClick={() => setModal()}><i className={styles.headerIcon + " fas fa-pen"} /></Button>
-        <Button className={styles.headerButton} onClick={() => setModal(settings)}><i className={styles.headerIcon + " fas fa-cog"} /></Button>
+        <Button className={styles.headerButton}><i aria-hidden className={styles.headerIcon + " fas fa-pen"} /></Button>
+        <Button className={styles.headerButton} onClick={() => setModal(settings)}><i aria-hidden className={styles.headerIcon + " fas fa-cog"} /></Button>
         {loginButton}
       </div>
     </header>

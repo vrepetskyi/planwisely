@@ -13,7 +13,7 @@ export default function Modal({ content, setModal }) {
     const handleBackdrop = (e) => {if (!containerRef?.current?.contains(e.target)) setModal()}
     let backdropVisible, containerVisible
     
-    if (transitionTimeout) {
+    if (transitionTimeout && content != targetContent) {
         actualContent = targetContent
         clearTimeout(transitionTimeout)
         transitionTimeout = null
@@ -52,25 +52,3 @@ export default function Modal({ content, setModal }) {
         </div>
     )
 }
-
-/*
-if (transitionTimeout) {
-        actualContent = targetContent
-        clearTimeout(transitionTimeout)
-        transitionTimeout = null
-    }
-
-    let backdropVisible, containerVisible = true
-    if (actualContent != content && actualContent && content) {
-        backdropVisible = true
-        containerVisible = false
-        transitionTimeout = setTimeout(() => actualContent = targetContent, transitionDuration)
-    } else
-    if (actualContent == content && content) {
-        backdropVisible = true
-    } else
-    if (!actualContent && content) {
-        backdropVisible = true
-        actualContent = targetContent
-    }
-    targetContent = content*/
