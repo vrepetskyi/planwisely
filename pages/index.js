@@ -1,14 +1,13 @@
 import { useSession, signIn, signOut } from 'next-auth/client'
 import Head from 'next/head'
 import Button from '../modules/Button'
-import { useContext } from 'react'
-import { ModalContext } from '../modules/Modal'
+import ModalContainer, { useModal } from '../modules/Modal'
 import Settings from '../modules/Settings'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
   const [session] = useSession()
-  const setModal = useContext(ModalContext)
+  const [isVisible, content, showModal] = useModal()
 
   let loginAlert
   let loginButton
@@ -19,7 +18,7 @@ export default function Home() {
     loginAlert = <p id={styles.loginAlert}>Change anything. <Button className={styles.signInButton} onClick={() => signIn('google')}>Sign in</Button> to save</p>
     loginButton = <Button className={styles.headerButton} onClick={() => signIn('google')}><i aria-hidden className={styles.headerIcon + " fab fa-google"} /></Button>
   }
-  let settings = <Settings session={session} setModal={setModal} />
+  let settings = <Settings session={session} showModal={showModal} />
 
   return (
     <>
@@ -31,10 +30,11 @@ export default function Home() {
       {loginAlert}
       <div>
         <Button className={styles.headerButton}><i aria-hidden className={styles.headerIcon + " fas fa-pen"} /></Button>
-        <Button className={styles.headerButton} onClick={() => setModal(settings)}><i aria-hidden className={styles.headerIcon + " fas fa-cog"} /></Button>
+        <Button className={styles.headerButton} onClick={() => showModal(settings)}><i aria-hidden className={styles.headerIcon + " fas fa-cog"} /></Button>
         {loginButton}
       </div>
     </header>
+    <ModalContainer isVisible={isVisible} content={content} showModal={showModal} />
     </> 
   )
 }

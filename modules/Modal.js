@@ -1,53 +1,61 @@
-import React, {createContext, useEffect, useRef} from 'react'
-import styles from '../styles/Modal.module.css'
+import { useEffect, useRef, useState } from 'react'
+import styles from '../styles/ModalContainer.module.css'
 
-export const ModalContext = createContext()
-let actualContent, targetContent
-const transitionDuration = 1000
-const style = {transitionDuration: transitionDuration + 'ms'}
-let transitionTimeout
+const transitionDuration = 300
 
+let replaceTimeout, modalHistory = [], isVisible
+export const useModal = () => {
+    const [content, setContent] = useState()
 
-export default function Modal({ content, setModal }) {
-    const containerRef = useRef()
-    const handleBackdrop = (e) => {if (!containerRef?.current?.contains(e.target)) setModal()}
-    let backdropVisible, containerVisible
+    const pushHistory = (content) => {
+        modalHistory.push(content)
+        history.pushState({modalHistoryId: modalHistory.length - 1}, '')
+    }
     
-    if (transitionTimeout && content != targetContent) {
-        actualContent = targetContent
-        clearTimeout(transitionTimeout)
-        transitionTimeout = null
+    const showModal = (targetContent, isPopState) => {
+        targetContent ? isVisible = true : isVisible = false
+        setContent((content) => {
+            if (replaceTimeout) {
+                clearTimeout(replaceTimeout)
+                replaceTimeout = null
+            }
+            if (targetContent && content && targetContent != content) {
+                replaceTimeout = setTimeout(() => {
+                    setContent(targetContent)
+                    replaceTimeout = null
+                }, transitionDuration)
+                return null
+            } else return targetContent
+        })
+        !isPopState && pushHistory(targetContent)
     }
-
-    targetContent = content
-
-    if (actualContent == content) {
-        if (content) {
-            backdropVisible = true
-            containerVisible = true
-        } else {
-            backdropVisible = false
-            containerVisible = true
-        }
-    } else
-    if (!actualContent && content) {
-        backdropVisible = true
-        containerVisible = true
-        actualContent = content
-    } else
-    if (actualContent && !content) {
-        backdropVisible = false
-        containerVisible = true
-        transitionTimeout = setTimeout(() => {
-            actualContent = targetContent
-            transitionTimeout = null
-        }, transitionDuration)
+    const handlePopState = (e) => {
+        if ('modalHistoryId' in e.state)
+            showModal(modalHistory[e.state.modalHistoryId], true)
     }
+    useEffect(() => {
+        pushHistory()
+        window.addEventListener('popstate', handlePopState)
+        return () => window.removeEventListener('popstate', handlePopState)
+    }, [])
+    
+    return [isVisible, content, showModal]
+}
+
+const style = {transitionDuration: transitionDuration + 'ms'}
+
+let previousContent
+export default function ModalContainer({ isVisible, content, showModal }) {
+    const modalRef = useRef()
+    const handleBackdrop = (e) => {if (!modalRef?.current?.contains(e.target)) showModal()}
+
+    const visibleContent = content || previousContent
+    previousContent = visibleContent
 
     return (
-        <div id={styles.backdrop} className={backdropVisible ? styles.visible : null} style={style} onClick={handleBackdrop}>
-            <div id={styles.container} className={containerVisible ? styles.visible : null} style={style} ref={containerRef}>
-                {actualContent}
+        <div id={styles.backdrop} className={isVisible ? styles.visible : null} style={style} onClick={handleBackdrop}>
+            <div id={styles.container} className={content ? styles.visible : null} style={style} ref={modalRef}>
+                {visibleContent}
             </div>
         </div>
     )
