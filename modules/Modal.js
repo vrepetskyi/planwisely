@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from '../styles/ModalContainer.module.css'
 
-const transitionDuration = 300
+const transitionDuration = 200
 
 let replaceTimeout, modalHistory = [], isVisible
 export const useModal = () => {
