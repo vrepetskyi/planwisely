@@ -1,10 +1,12 @@
 import { useSession, signOut } from 'next-auth/client'
+import { useRouter } from 'next/dist/client/router'
 import ModalNavigation from './ModalNavigation'
 import Button from './Button'
 import styles from '../styles/Settings.module.css'
 
 export default function Settings() {
     const [session] = useSession()
+    const router = useRouter()
     return (
         <div id={styles.container}>
             <ModalNavigation title="Settings" />
@@ -16,12 +18,21 @@ export default function Settings() {
                         <p>{session.user.email}</p>
                     </div>
                     <div id={styles.actions}>
-                        <Button className={styles.export}>Export to Google Calendar</Button>
-                        <Button className={styles.delete}>Delete plan</Button>
-                        <Button className={styles.logout} onClick={() => signOut('google')}><i className="fas fa-sign-in-alt" /></Button>
+                        <Button style={{backgroundColor: '#6bace8'}}>Export to Google Calendar</Button>
+                        <Button style={{backgroundColor: '#ea7474'}} onClick={() => router.push('/delete', undefined, { shallow: true })}>Delete plan</Button>
+                        <Button style={{backgroundColor: 'rgb(180, 180, 180)'}} onClick={() => signOut('google')}><i className="fas fa-sign-in-alt" /></Button>
                     </div>
                 </div>
             )}
+            <div id={styles.weeks}>
+                <h1>Weeks</h1>
+                <div id={styles.current}>
+                    <p>The current week is: </p>
+                </div>
+                <div id={styles.table}>
+
+                </div>
+            </div>
         </div>
     )
 }

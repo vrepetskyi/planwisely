@@ -1,6 +1,6 @@
 import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useRef, useState } from 'react'
-import styles from '../styles/ModalContainer.module.css'
+import styles from '../styles/Modal.module.css'
 
 const transitionDuration = 300
 const style = { transitionDuration: transitionDuration + 'ms' }
@@ -16,7 +16,7 @@ export default function Modal({ children: targetContent }) {
                 clearTimeout(replaceTimeout)
                 replaceTimeout = null
             }
-            if (targetContent && content && targetContent != content) {
+            if (targetContent && content && targetContent.type != content.type) {
                 replaceTimeout = setTimeout(() => {
                     setContent(targetContent)
                     replaceTimeout = null

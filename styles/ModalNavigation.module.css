@@ -1,5 +1,14 @@
 #container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+#container h1 {
+    font-size: 28px
+}
+
+#container i {
+    color: gray;
 }

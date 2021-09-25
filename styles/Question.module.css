@@ -1,0 +1,23 @@
+#question {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+#question p {
+    font-size: 20px;
+    text-align: center;
+    margin: 10px 10px 30px 10px;
+}
+
+#choise {
+    display: flex;
+    justify-content: space-around;
+}
+
+.button {
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: rgb(180, 180, 180);
+    color: white;
+}
