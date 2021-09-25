@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styles from '../styles/ModalContainer.module.css'
 
-const transitionDuration = 200
+const transitionDuration = 300
 
-let replaceTimeout, modalHistory = [], isVisible
-export const useModal = () => {
+let replaceTimeout, isVisible
+export let modalHistory = []
+const useContent = () => {
     const [content, setContent] = useState()
 
     const pushHistory = (content) => {
@@ -42,10 +43,13 @@ export const useModal = () => {
     return [isVisible, content, showModal]
 }
 
+const ModalContext = React.createContext()
+export const useModal = () => useContext(ModalContext)
+
 const style = {transitionDuration: transitionDuration + 'ms'}
 
 let previousContent
-export default function ModalContainer({ isVisible, content, showModal }) {
+const ModalContainer = ({ isVisible, content, showModal }) => {
     const modalRef = useRef()
     const handleBackdrop = (e) => {if (!modalRef?.current?.contains(e.target)) showModal()}
 
@@ -58,5 +62,15 @@ export default function ModalContainer({ isVisible, content, showModal }) {
                 {visibleContent}
             </div>
         </div>
+    )
+}
+
+export const ModalProvider = ({ children }) => {
+    const [isVisible, content, showModal] = useContent()
+    return (
+        <ModalContext.Provider value={showModal}>
+            {children}
+            <ModalContainer isVisible={isVisible} content={content} showModal={showModal} />
+        </ModalContext.Provider>
     )
 }

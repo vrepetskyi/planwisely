@@ -4,11 +4,9 @@ import Button from './Button'
 import Settings from './Settings'
 import styles from '../styles/Header.module.css'
 
-export default function Header({ isVisible, content, showModal }) {
+export default function Header() {
     const [session] = useSession()
-    
-    let settings = <Settings session={session} showModal={showModal} />
-
+    const showModal = useModal()    
     return (
         <header id={styles.header}>
             <div id={styles.logo}>
@@ -17,9 +15,9 @@ export default function Header({ isVisible, content, showModal }) {
             </div>
             {!session && <p id={styles.loginAlert}>Change anything. <Button className={styles.signInButton} onClick={() => signIn('google')}>Sign in</Button> to save</p>}
             <div>
-                <Button className={styles.headerButton}><i aria-hidden className={styles.headerIcon + " fas fa-pen"} /></Button>
-                <Button className={styles.headerButton} onClick={() => showModal(settings)}><i aria-hidden className={styles.headerIcon + " fas fa-cog"} /></Button>
-                <Button className={styles.headerButton} onClick={() => session ? signOut('google') : signIn('google')}><i aria-hidden className={styles.headerIcon + session ? " fas fa-sign-in-alt" : " fab fa-google"} /></Button>
+                <Button><i aria-hidden className={styles.headerIcon + " fas fa-pen"} /></Button>
+                <Button onClick={() => showModal(<Settings />)}><i aria-hidden className={styles.headerIcon + " fas fa-cog"} /></Button>
+                <Button onClick={() => session ? signOut('google') : signIn('google')}><i aria-hidden className={styles.headerIcon + session ? " fas fa-sign-in-alt" : " fab fa-google"} /></Button>
             </div>
         </header>
     )

@@ -1,0 +1,39 @@
+#user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#user img {
+    height: 75px;
+    width: 75px;
+    border-radius: 50px;
+}
+
+#info {
+    margin: 0 20px;
+}
+
+#actions {
+    display: flex;
+    align-items: stretch;
+}
+
+#actions button {
+    margin: 0 2px;
+}
+
+.export {
+    color: white;
+    background-color: darkblue;
+}
+
+.delete {
+    color: white;
+    background-color: darkred;
+}
+
+.logout {
+    color: white;
+    background-color: brown;
+}
