@@ -1,15 +1,13 @@
 import { useSession, signOut } from 'next-auth/client'
-import { useModal } from './Modal'
 import ModalNavigation from './ModalNavigation'
 import Button from './Button'
 import styles from '../styles/Settings.module.css'
 
 export default function Settings() {
     const [session] = useSession()
-    const showModal = useModal()
     return (
         <div id={styles.container}>
-            <ModalNavigation title="Settings" showModal={showModal} />
+            <ModalNavigation title="Settings" />
             {session && (
                 <div id={styles.user}>
                     <img src={session.user.image} />

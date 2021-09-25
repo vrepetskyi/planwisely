@@ -10,8 +10,8 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-            <link rel="shortcut icon" href="/planwisely.svg" />
-            <link rel="manifest" href="/manifest.json" />
+          <link rel="shortcut icon" href="/planwisely.svg" />
+          <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
           <Main />
