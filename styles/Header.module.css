@@ -25,21 +25,17 @@
     font-size: 18px;
     margin: 0 10px;
   }
+
+  #actions {
+    display: flex;
+  }
   
   .signInButton {
+    display: inline-block;
     padding: 10px 15px;
     margin: 0 5px;
     background-color: #3b3bff;
     border-radius: 25px;
     color: white;
-    font-size: 18px;
-  }
-  
-  .headerButton {
-    height: 50px;
-    width: 50px;
-  }
-  
-  .headerButton i {
     font-size: 18px;
   }

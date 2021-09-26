@@ -2,6 +2,7 @@ import { useSession, signOut } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
 import ModalNavigation from './ModalNavigation'
 import Button from './Button'
+import Select from './Select'
 import styles from '../styles/Settings.module.css'
 
 export default function Settings() {
@@ -28,6 +29,7 @@ export default function Settings() {
                 <h1>Weeks</h1>
                 <div id={styles.current}>
                     <p>The current week is: </p>
+                    <Select items={['Чисельник', 'Знаменник', 'Ще щось']} />
                 </div>
                 <div id={styles.table}>
 
