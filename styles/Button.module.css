@@ -30,7 +30,7 @@
   background-color: rgba(0, 0, 0, .1);
   pointer-events: none;
   transition: transform .3s;
-  }
+}
   
 .button:hover::before{
   transform: translate(-50%, -50%) scale(1, 1);

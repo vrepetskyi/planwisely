@@ -29,7 +29,7 @@ export default function Settings() {
                 <h1>Weeks</h1>
                 <div id={styles.current}>
                     <p>The current week is: </p>
-                    <Select items={['Чисельник', 'Знаменник', 'Ще щось']} />
+                    <Select items={['Чисельник', 'Знаменник', 'Ще щось', 'і ще']} />
                 </div>
                 <div id={styles.table}>
 
