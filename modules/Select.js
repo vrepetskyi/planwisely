@@ -2,13 +2,26 @@ import { useEffect, useRef, useState } from "react"
 import Button from "./Button"
 import styles from '../styles/Select.module.css'
 
-let lastScrollPosition
 export default function Select({ items }) {
     const [selectedId, setSelectedId] = useState(0)
     const [visible, setVisible] = useState()
 
     const selectRef = useRef()
+
+    //set select style depending on content
+    useEffect(() => {
+        const listElem = selectRef.current.children[0]
+        const itemElem = listElem.children[0]
+        selectRef.current.style.width = itemElem.offsetWidth + 'px'
+        selectRef.current.style.height = itemElem.offsetHeight + 'px'
+        listElem.style.transform = `translateY(-${itemElem.offsetHeight * selectedId}px)`
+        listElem.style.borderRadius = window.getComputedStyle(itemElem).getPropertyValue('border-radius')
+    })
+
+    //force update select dimensions on init
+    useEffect(() => setVisible(false), [])
     
+    //handle events
     const handleClick = (e) => {
         if (selectRef.current.contains(e.target)) {
             if (e.target.value) {
@@ -26,12 +39,6 @@ export default function Select({ items }) {
     }
 
     useEffect(() => {
-        const listElem = selectRef.current.children[0]
-        const itemElem = listElem.children[0]
-        selectRef.current.style.width = itemElem.offsetWidth + 'px'
-        selectRef.current.style.height = itemElem.offsetHeight + 'px'
-        listElem.style.transform = `translateY(-${itemElem.offsetHeight * selectedId}px)`
-        listElem.style.borderRadius = window.getComputedStyle(itemElem).getPropertyValue('border-radius')
         if (visible) window.addEventListener('wheel', handleScroll, {passive: true})
         else listElem.addEventListener('wheel', handleScroll, {passive: true})
         window.addEventListener('click', handleClick)
