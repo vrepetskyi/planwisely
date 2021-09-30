@@ -1,0 +1,15 @@
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#container button {
+    color: gray;
+    margin: 0 10px;
+}
+
+.week {
+    display: flex;
+    margin: 10px 0;
+}

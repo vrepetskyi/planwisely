@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import Button from "./Button"
 import styles from '../styles/Select.module.css'
 
-export default function Select({ items }) {
-    const [selectedId, setSelectedId] = useState(0)
+export default function Select({ items, index, setIndex }) {
     const [visible, setVisible] = useState()
 
     const selectRef = useRef()
@@ -12,16 +11,16 @@ export default function Select({ items }) {
         if (selectRef.current.contains(e.target)) {
             if (e.target.value) {
                 if (visible && e.target.value) {
-                    setSelectedId(e.target.value)
+                    setIndex(e.target.value)
                     setVisible()
-                } else e.target.value == selectedId && setVisible(true)
+                } else items.length > 1 && e.target.value == index && setVisible(true)
             }
         } else visible && setVisible()
     }
 
     const handleScroll = (e) => {
-        if (e.deltaY > 0) setSelectedId((selectedId) => Math.min(items.length - 1, selectedId + 1))
-        if (e.deltaY < 0) setSelectedId((selectedId) => Math.max(0, selectedId - 1))
+        if (e.deltaY > 0) setIndex((index) => Math.min(items.length - 1, index + 1))
+        if (e.deltaY < 0) setIndex((index) => Math.max(0, index - 1))
     }
 
     useEffect(() => {
@@ -31,7 +30,7 @@ export default function Select({ items }) {
 
         selectRef.current.style.width = itemElem.offsetWidth + 'px'
         selectRef.current.style.height = itemElem.offsetHeight + 'px'
-        listElem.style.transform = `translateY(-${itemElem.offsetHeight * selectedId}px)`
+        listElem.style.transform = `translateY(-${itemElem.offsetHeight * index}px)`
         listElem.style.borderRadius = window.getComputedStyle(itemElem).getPropertyValue('border-radius')
         
         //handle events
@@ -52,7 +51,7 @@ export default function Select({ items }) {
         <div id={styles.select} ref={selectRef}>
             <div id={styles.list} className={visible ? styles.visible : null}>
                 {items.map((item, i) => {
-                    return <Button key={i} value={i} className={(visible || i == selectedId) ? styles.visible : null} style={{textDecoration: i == selectedId ? 'underline' : null}}>{item}</Button>
+                    return <Button key={i} value={i} className={(visible || i == index) ? styles.visible : null} style={{textDecoration: i == index ? 'underline' : null}}>{item}</Button>
                 })}
             </div>
         </div>

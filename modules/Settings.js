@@ -1,13 +1,18 @@
 import { useSession, signOut } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
+import { useState } from 'react'
 import ModalNavigation from './ModalNavigation'
 import Button from './Button'
 import Select from './Select'
+import Text from './Text'
+import WeeksList from './WeeksList'
 import styles from '../styles/Settings.module.css'
 
 export default function Settings() {
     const [session] = useSession()
     const router = useRouter()
+    const [weekIndex, setWeekIndex] = useState(0)
+    const [weekNames, setWeekNames] = useState(['Week 1'])
     return (
         <div id={styles.container}>
             <ModalNavigation title="Settings" />
@@ -28,12 +33,10 @@ export default function Settings() {
             <div id={styles.weeks}>
                 <h1>Weeks</h1>
                 <div id={styles.current}>
-                    <p>The current week is: </p>
-                    <Select items={['Чисельник', 'Знаменник', 'Ще щось', 'і ще']} />
+                    <p>The current week is:</p>
+                    <Select items={weekNames} index={weekIndex} setIndex={setWeekIndex} />
                 </div>
-                <div id={styles.table}>
-
-                </div>
+                <WeeksList weeks={weekNames} setWeeks={setWeekNames} />
             </div>
         </div>
     )
