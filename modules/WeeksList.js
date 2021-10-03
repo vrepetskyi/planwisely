@@ -10,7 +10,7 @@ export default function WeeksList({ weeks, setWeeks }) {
                 console.log(1)
                 let id = 0
                 while (weeks.find(week => week.id == id)) id++
-                weeks.push({ id, name: `Week ${weeks.length}` })
+                weeks.push({ id, name: `Week ${weeks.length + 1}` })
             } else {
                 const weekIndex = weeks.findIndex(week => week.id == id)
                 if (value) weeks[weekIndex].name = value

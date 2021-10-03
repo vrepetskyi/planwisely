@@ -1,13 +1,13 @@
 #user {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 10px;
     justify-content: center;
     align-items: center;
+    margin: 0 -10px 10px -10px;
 }
 
 #user > * {
-    margin-bottom: 10px;
+    margin: 0 10px 10px 10px;
 }
 
 #user img {
@@ -16,16 +16,11 @@
     border-radius: 50px;
 }
 
-#info {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
 #actions {
     display: flex;
     align-items: stretch;
-    margin-left: -2px;
-    margin-right: -2px;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 #actions button {
@@ -52,5 +47,6 @@
 }
 
 #current p {
+    text-align: center;
     margin-right: 10px;
 }
