@@ -29,3 +29,16 @@ a {
   box-sizing: border-box;
   font-family: 'Roboto Slab', serif;
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: lightgray;
+}

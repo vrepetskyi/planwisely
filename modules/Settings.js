@@ -4,15 +4,14 @@ import { useState } from 'react'
 import ModalNavigation from './ModalNavigation'
 import Button from './Button'
 import Select from './Select'
-import Text from './Text'
 import WeeksList from './WeeksList'
 import styles from '../styles/Settings.module.css'
 
 export default function Settings() {
     const [session] = useSession()
     const router = useRouter()
-    const [weekIndex, setWeekIndex] = useState(0)
-    const [weekNames, setWeekNames] = useState(['Week 1'])
+    const [selectedWeekId, setSelectedWeekId] = useState(0)
+    const [weeks, setWeeks] = useState([{ id: 0, name: 'Week 1' }])
     return (
         <div id={styles.container}>
             <ModalNavigation title="Settings" />
@@ -34,9 +33,9 @@ export default function Settings() {
                 <h1>Weeks</h1>
                 <div id={styles.current}>
                     <p>The current week is:</p>
-                    <Select items={weekNames} index={weekIndex} setIndex={setWeekIndex} />
+                    <Select items={weeks} selectedId={selectedWeekId} setSelectedId={setSelectedWeekId} />
                 </div>
-                <WeeksList weeks={weekNames} setWeeks={setWeekNames} />
+                <WeeksList weeks={weeks} setWeeks={setWeeks} />
             </div>
         </div>
     )

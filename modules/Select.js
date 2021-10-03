@@ -2,35 +2,39 @@ import { useEffect, useRef, useState } from "react"
 import Button from "./Button"
 import styles from '../styles/Select.module.css'
 
-export default function Select({ items, index, setIndex }) {
+export default function Select({ items, selectedId, setSelectedId }) {
     const [visible, setVisible] = useState()
-
     const selectRef = useRef()
+
+    const selectedIndex = items.findIndex(item => item.id == selectedId)
     
     const handleClick = (e) => {
         if (selectRef.current.contains(e.target)) {
-            if (e.target.value) {
-                if (visible && e.target.value) {
-                    setIndex(e.target.value)
+            const targetIndex = e.target.value
+            if (targetIndex) {
+                if (visible && targetIndex) {
+                    setSelectedId(items[targetIndex].id)
                     setVisible()
-                } else items.length > 1 && e.target.value == index && setVisible(true)
+                } else items.length > 1 && targetIndex == selectedIndex && setVisible(true)
             }
         } else visible && setVisible()
     }
 
     const handleScroll = (e) => {
-        if (e.deltaY > 0) setIndex((index) => Math.min(items.length - 1, index + 1))
-        if (e.deltaY < 0) setIndex((index) => Math.max(0, index - 1))
+        if (e.deltaY > 0) setSelectedId(items[Math.min(items.length - 1, selectedIndex + 1)].id)
+        if (e.deltaY < 0) setSelectedId(items[Math.max(0, selectedIndex - 1)].id)
     }
 
     useEffect(() => {
+        //handle empty item
+        if (!items[selectedIndex]) setSelectedId(items[items.length - 1].id)
         //set select style depending on content
         const listElem = selectRef.current.children[0]
         const itemElem = listElem.children[0]
 
         selectRef.current.style.width = itemElem.offsetWidth + 'px'
         selectRef.current.style.height = itemElem.offsetHeight + 'px'
-        listElem.style.transform = `translateY(-${itemElem.offsetHeight * index}px)`
+        listElem.style.transform = `translateY(-${itemElem.offsetHeight * selectedIndex}px)`
         listElem.style.borderRadius = window.getComputedStyle(itemElem).getPropertyValue('border-radius')
         
         //handle events
@@ -51,7 +55,7 @@ export default function Select({ items, index, setIndex }) {
         <div id={styles.select} ref={selectRef}>
             <div id={styles.list} className={visible ? styles.visible : null}>
                 {items.map((item, i) => {
-                    return <Button key={i} value={i} className={(visible || i == index) ? styles.visible : null} style={{textDecoration: i == index ? 'underline' : null}}>{item}</Button>
+                    return <Button key={i} value={i} className={(visible || i == selectedIndex) ? styles.visible : null} style={{textDecoration: i == selectedIndex ? 'underline' : null}}>{item.name}</Button>
                 })}
             </div>
         </div>

@@ -7,15 +7,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 20px;
     background-color: rgba(0, 0, 0, .1);
     backdrop-filter: blur(2px);
     z-index: 1;
 }
 
 #container {
-    max-width: 600px;
-    max-height: 800px;
+    max-height: 100%;
+    overflow-y: scroll;
     padding: 20px;
     border-radius: 4px;
     background-color: white;

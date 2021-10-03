@@ -1,8 +1,13 @@
 #user {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+}
+
+#user > * {
+    margin-bottom: 10px;
 }
 
 #user img {
@@ -12,17 +17,20 @@
 }
 
 #info {
-    margin: 0 20px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 #actions {
     display: flex;
     align-items: stretch;
+    margin-left: -2px;
+    margin-right: -2px;
 }
 
 #actions button {
-    margin: 0 2px;
     color: white;
+    margin: 0 2px;
 }
 
 #weeks {
