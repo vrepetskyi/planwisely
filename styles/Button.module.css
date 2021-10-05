@@ -7,13 +7,11 @@
   -webkit-tap-highlight-color: transparent;
   padding: 5px 10px;
   cursor: pointer;
-  z-index: 1;
 }
 
 .containingIcon {
   height: 50px;
   width: 50px;
-  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +26,6 @@
   height: 100%;
   border-radius: var(--border-radius);
   background-color: rgba(0, 0, 0, .1);
-  z-index: -1;
   transform: translate(-50%, -50%) scale(0, 0);
   transition: transform .3s;
 }

@@ -1,10 +1,20 @@
 #header {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 10px;
+    padding: 0 10px;
     background-color: rgb(240, 240, 240);
+  }
+
+  #header > * {
+    margin: 2.5px 0;
+  }
+
+  @media (max-width: 800px) {
+    #header {
+      justify-content: center;
+      flex-direction: column;
+    }
   }
   
   #logo {
@@ -24,20 +34,19 @@
   }
   
   #loginAlert {
+    text-align: center;
     font-size: 18px;
     margin: 0 10px;
   }
-
-  #actions {
-    display: flex;
-  }
   
-  .signInButton {
-    display: inline-block;
-    padding: 10px 15px;
-    margin: 0 5px;
+  #loginAlert button {
+    padding: 8px 12px;
     background-color: #3b3bff;
     border-radius: 25px;
     color: white;
     font-size: 18px;
+  }
+
+  #actions {
+    display: flex;
   }

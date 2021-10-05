@@ -27,15 +27,17 @@ export default function Select({ items, selectedId, setSelectedId }) {
 
     useEffect(() => {
         //handle empty item
-        if (!items[selectedIndex]) setSelectedId(items[items.length - 1].id)
+        if (selectedIndex == -1) setSelectedId(items[0].id)
         //set select style depending on content
         const listElem = selectRef.current.children[0]
         const itemElem = listElem.children[0]
 
-        selectRef.current.style.width = itemElem.offsetWidth + 'px'
+        listElem.style.width = 'auto'
+        selectRef.current.style.width = itemElem.offsetWidth + 1 + 'px'
         selectRef.current.style.height = itemElem.offsetHeight + 'px'
         listElem.style.transform = `translateY(-${itemElem.offsetHeight * selectedIndex}px)`
         listElem.style.borderRadius = window.getComputedStyle(itemElem).getPropertyValue('border-radius')
+        listElem.style.width = '100%'
         
         //handle events
         if (visible) window.addEventListener('wheel', handleScroll, {passive: true})

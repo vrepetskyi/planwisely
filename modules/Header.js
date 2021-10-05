@@ -12,7 +12,7 @@ export default function Header() {
                 <img src="/planwisely.svg" />
                 <h1>planwisely</h1>
             </div>
-            {!session && <p id={styles.loginAlert}>Change anything. <Button className={styles.signInButton} onClick={() => signIn('google')}>Sign in</Button> to save</p>}
+            {!session && <p id={styles.loginAlert}>Change anything. <Button onClick={() => signIn('google')}>Sign in</Button> to save</p>}
             <div id={styles.actions}>
                 <Button><i aria-hidden className=" fas fa-pen" /></Button>
                 <Button onClick={() => router.push('/settings', undefined, { shallow: true })}><i aria-hidden className="fas fa-cog" /></Button>

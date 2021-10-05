@@ -1,6 +1,5 @@
 #select {
     position: relative;
-    transition: .3s width;
 }
 
 #select button {
@@ -32,7 +31,6 @@
     pointer-events: none;
     opacity: 0;
     transition: opacity .3s;
-    max-width: 200px;
     text-overflow: ellipsis;
 }
 

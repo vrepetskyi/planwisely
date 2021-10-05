@@ -11,7 +11,7 @@ export default function Settings() {
     const [session] = useSession()
     const router = useRouter()
     const [selectedWeekId, setSelectedWeekId] = useState(0)
-    const [weeks, setWeeks] = useState([{ id: 0, name: 'Week 1' }])
+    const [weeks, setWeeks] = useState([{ id: 0, name: 'Weeeeeeeeeeeeeeeeeeeek 1' }])
     return (
         <div id={styles.container}>
             <ModalNavigation title="Settings" />
