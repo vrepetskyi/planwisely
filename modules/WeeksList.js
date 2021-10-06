@@ -3,93 +3,83 @@ import Text from "./Text"
 import styles from '../styles/WeeksList.module.css'
 import { useRef } from "react"
 
-let dragTarget, initialMouseY, initialPositionY, positionY, minOffsetY, maxOffsetY, targetIndex, targetElement
+let weeks, dragIndex, dragHeight, initialMouseY, initialPositionY, minOffsetY, maxOffsetY, targetIndex
 export default function WeeksList({ weeks, setWeeks }) {
     const weeksRef = useRef()
 
     const registerDrag = (e) => {
         const offsetY = Math.min(maxOffsetY, Math.max(e.clientY - initialMouseY, minOffsetY))
-        positionY = initialPositionY + offsetY
+        const positionY = initialPositionY + offsetY
 
         targetIndex = 0
-        targetElement = weeksRef.current.children[targetIndex]
-        while (positionY > targetElement.offsetTop + targetElement.offsetHeight / 2) {
-            targetIndex++
-            targetElement = weeksRef.current.children[targetIndex]
-        }
+        while (positionY > weeks[targetIndex].offsetTop + weeks[targetIndex].offsetHeight / 2) targetIndex++
 
-        for (let i = 0; i < weeksRef.current.children.length; i++) {
-            if (i == dragTarget) {
-                weeksRef.current.children[i].style.transform = `translateY(${offsetY}px)`
-                weeksRef.current.children[i].style.transition = 'none'
+        for (let i = 0; i < weeks.length; i++) {
+            if (i == dragIndex) {
+                weeks[i].style.transform = `translateY(${offsetY}px)`
+                weeks[i].style.transition = 'none'
             }
             else {
-                if (i <= targetIndex && i > dragTarget) {
-                    weeksRef.current.children[i].style.transform = `translateY(${-weeksRef.current.children[dragTarget].offsetHeight}px)`
-                } else if (i >= targetIndex && i < dragTarget) {
-                    weeksRef.current.children[i].style.transform = `translateY(${weeksRef.current.children[dragTarget].offsetHeight}px)`
+                if (i <= targetIndex && i > dragIndex) {
+                    weeks[i].style.transform = `translateY(${-dragHeight}px)`
+                } else if (i >= targetIndex && i < dragIndex) {
+                    weeks[i].style.transform = `translateY(${dragHeight}px)`
                 } else {
-                    weeksRef.current.children[i].style.transform = 'none'
+                    weeks[i].style.transform = 'none'
                 }
-                weeksRef.current.children[i].style.transition = 'transform .3s'
+                weeks[i].style.transition = 'transform .3s'
             }
         }
-        console.log(dragTarget, targetIndex)
     }
-    const startDrag = (e, index) => {
-        dragTarget = index
-        initialMouseY = e.clientY
-        initialPositionY = weeksRef.current.children[dragTarget].offsetTop
-        minOffsetY = weeksRef.current.children[0].offsetTop - initialPositionY
-        maxOffsetY = weeksRef.current.children[weeksRef.current.children.length - 1].offsetTop - initialPositionY
 
-        weeksRef.current.children[dragTarget].style.transition = 'box-shadow .3s, opacity .3s'
-        weeksRef.current.children[dragTarget].style.zIndex = 1
-        weeksRef.current.children[dragTarget].style.boxShadow = '0 0 4px gray'
+    const startDrag = (e, index) => {
+        weeks = weeksRef.current.children
+        dragIndex = index
+        dragHeight = weeks[dragIndex].offsetHeight + parseInt(window.getComputedStyle(weeks[dragIndex]).marginTop)
+        initialMouseY = e.clientY
+        initialPositionY = weeks[dragIndex].offsetTop
+        minOffsetY = weeks[0].offsetTop - initialPositionY
+        maxOffsetY = weeks[weeks.length - 1].offsetTop - initialPositionY
+
+        weeks[dragIndex].style.transition = 'box-shadow .3s, opacity .3s'
+        weeks[dragIndex].style.boxShadow = '0 0 4px gray'
+        weeks[dragIndex].style.zIndex = 1
 
         window.addEventListener('mousemove', registerDrag)
         window.addEventListener('mouseup', endDrag)
     }
+
     const endDrag = () => {
         window.removeEventListener('mouseup', endDrag)
         window.removeEventListener('mousemove', registerDrag)
 
-        for (let i = 0; i < weeksRef.current.children.length; i++) {
-            if (i == dragTarget) {
-                weeksRef.current.children[i].style.boxShadow = '0 0 4px transparent'
-                weeksRef.current.children[i].style.zIndex = 0
-                const dragTargetElement = weeksRef.current.children[i]
-                /*setTimeout(() => {
-                    dragTargetElement.style.transition = 'box-shadow .3s, opacity .3s, z-index 0s .3s'
-                    dragTargetElement.style.transform = `translateY(${positionY - weeksRef.current.children[targetIndex].offsetTop}px)`
-                    setTimeout(() => {
-                        dragTargetElement.style.transition = 'box-shadow .3s, opacity .3s, z-index 0s .3s, transform .3s'
-                        dragTargetElement.style.transform = 'none'
-                    }, 0)
-                }, 0)*/
-            } else {
-                weeksRef.current.children[i].style.transition = 'none'
-                weeksRef.current.children[i].style.transform = 'none'
-            }
-        }
+        weeks[dragIndex].style.transition = 'box-shadow .3s, opacity .3s, z-index 0s .3s, transform .3s'
+        weeks[dragIndex].style.transform = `translateY(${weeks[targetIndex].offsetTop - initialPositionY}px)`
+        weeks[dragIndex].style.boxShadow = '0 0 4px transparent'
+        weeks[dragIndex].style.zIndex = 0
         
-        if (targetIndex != dragTarget) {
-            setWeeks((oldWeeks) => {
-                const weeks = [...oldWeeks]
-                if (targetIndex < dragTarget) {
-                    weeks.splice(dragTarget, 1)
-                    weeks.splice(targetIndex, 0, oldWeeks[dragTarget])
-                } else {
-                    weeks.splice(targetIndex + 1, 0, oldWeeks[dragTarget])
-                    weeks.splice(dragTarget, 1)
+        if (dragIndex != undefined && targetIndex != dragIndex) {
+            setTimeout(() => {
+                setWeeks((oldWeeks) => {
+                    const weeks = [...oldWeeks]
+                    if (targetIndex < dragIndex) {
+                        weeks.splice(dragIndex, 1)
+                        weeks.splice(targetIndex, 0, oldWeeks[dragIndex])
+                    } else {
+                        weeks.splice(targetIndex + 1, 0, oldWeeks[dragIndex])
+                        weeks.splice(dragIndex, 1)
+                    }
+                    return weeks
+                })
+                for (let i = 0; i < weeks.length; i++) {
+                    weeks[i].style.transition = 'none'
+                    weeks[i].style.transform = 'none'
                 }
-                return weeks
-            })
+                dragIndex = undefined
+            }, 300)
         }
-
-        dragTarget = null
     }
-
+    
     const changeWeek = (id, value) => {
         setWeeks((oldWeeks) => {
             const weeks = [...oldWeeks]
@@ -119,7 +109,7 @@ export default function WeeksList({ weeks, setWeeks }) {
                     )
                 })}
             </div>
-            {weeks.length < 4 && <Button onClick={() => changeWeek()}><i className="fas fa-plus" /></Button>}
+            {weeks.length < 4 && <Button style={{marginTop: '10px'}} onClick={() => changeWeek()}><i className="fas fa-plus" /></Button>}
         </div>
     )
 }

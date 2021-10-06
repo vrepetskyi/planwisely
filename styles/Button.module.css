@@ -7,11 +7,12 @@
   -webkit-tap-highlight-color: transparent;
   padding: 5px 10px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .containingIcon {
-  height: 50px;
-  width: 50px;
+  height: 45px;
+  width: 45px;
   display: flex;
   justify-content: center;
   align-items: center;

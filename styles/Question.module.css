@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 300px;
+    max-width: 100%;
 }
 
 #question p {
@@ -11,11 +12,14 @@
 }
 
 #choise {
+    margin: -4px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
 }
 
 .button {
+    margin: 4px;
     font-size: 18px;
     padding: 10px 20px;
     background-color: rgb(180, 180, 180);
