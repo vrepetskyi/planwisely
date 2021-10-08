@@ -6,7 +6,7 @@ export default async (req, res) => {
   try {
     const planRequest = await pg.query('SELECT * FROM plans WHERE email = $1', [session?.user.email])
     if (session) {
-      if (planRequest.rows) { // existing plan found
+      if (planRequest.rows.length) { // existing plan found
         const planId = planRequest.rows[0].id
         switch (req.method) {
           case 'GET':
