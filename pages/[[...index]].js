@@ -1,11 +1,12 @@
 import { useRouter } from 'next/dist/client/router'
 import { useEffect } from 'react'
-import { useSession, getSession } from 'next-auth/react'
+import { signOut, useSession, } from 'next-auth/react'
 import Settings from '../modules/Settings'
 import Question from '../modules/Question'
 import Head from 'next/head'
 import Header from '../modules/Header'
 import Modal from '../modules/Modal'
+import axios from 'axios'
 
 export default function Home() {
   const router = useRouter()
@@ -15,7 +16,7 @@ export default function Home() {
     }
   })
 
-  const { status } = useSession()
+  const { data:session, status } = useSession()
   if (status == 'loading') return null
 
   let modalContent
@@ -26,10 +27,20 @@ export default function Home() {
         modalContent = <Settings />
         break
       case 'delete':
-        modalContent = <Question question="Delete the plan? Action cannot be undone" confirm="Delete" confirmStyle={{backgroundColor: 'var(--color-attention)'}} />
-      default:
-        if (router.query.index.length > 1) {
-          const queryId = router.query.index[1]
+        if (session) {
+          modalContent = <Question
+            question="Delete the plan? Action cannot be undone"
+            confirm="Delete"
+            confirmStyle={{ backgroundColor: 'var(--color-attention)' }}
+            onConfirm={async () => {
+              try {
+                await axios.delete(`${router.basePath}/api/database`)
+                signOut()
+              } catch (error) {
+                console.log(error.response.data)
+              }
+            }}
+          />
         }
     }
   }
@@ -46,8 +57,6 @@ export default function Home() {
     </>
   )
 }
-
-import axios from 'axios'
 
 export async function getServerSideProps(context) {
   const defaultPlan = {

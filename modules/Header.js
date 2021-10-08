@@ -22,7 +22,7 @@ export default function Header() {
             <div id={styles.actions}>
                 <Button><i aria-hidden className=" fas fa-pen" /></Button>
                 <Button onClick={() => router.push('/settings', undefined, { shallow: true })}><i aria-hidden className="fas fa-cog" /></Button>
-                <Button onClick={() => session ? signOut('google') : signIn('google')}><i aria-hidden className={session ? " fas fa-sign-in-alt" : " fab fa-google"} /></Button>
+                <Button onClick={() => session ? signOut() : signIn('google')}><i aria-hidden className={session ? " fas fa-sign-in-alt" : " fab fa-google"} /></Button>
             </div>
         </header>
     )

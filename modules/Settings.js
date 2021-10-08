@@ -41,7 +41,7 @@ export default function Settings() {
                     <div id={styles.actions}>
                         <Button style={{backgroundColor: '#6bace8'}}>Export to Google Calendar</Button>
                         <Button style={{backgroundColor: 'var(--color-attention)'}} onClick={() => router.push('/delete', undefined, { shallow: true })}>Delete plan</Button>
-                        <Button style={{backgroundColor: 'rgb(180, 180, 180)'}} onClick={() => signOut('google')}><i className="fas fa-sign-in-alt" /></Button>
+                        <Button style={{backgroundColor: 'rgb(180, 180, 180)'}} onClick={() => signOut()}><i className="fas fa-sign-in-alt" /></Button>
                     </div>
                 </div>
             )}
