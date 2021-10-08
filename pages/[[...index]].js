@@ -1,6 +1,6 @@
 import { useRouter } from 'next/dist/client/router'
 import { useEffect } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession, getSession } from 'next-auth/react'
 import Settings from '../modules/Settings'
 import Question from '../modules/Question'
 import Head from 'next/head'
@@ -15,8 +15,8 @@ export default function Home() {
     }
   })
 
-  const [session, loading] = useSession()
-  if (typeof window !== 'undefined' && loading) return null
+  const { status } = useSession()
+  if (status == 'loading') return null
 
   let modalContent
   if ('index' in router.query) {
@@ -26,7 +26,7 @@ export default function Home() {
         modalContent = <Settings />
         break
       case 'delete':
-        modalContent = <Question question="Delete the plan? Action cannot be undone" confirm="Delete" confirmStyle={{backgroundColor: '#ea7474'}} />
+        modalContent = <Question question="Delete the plan? Action cannot be undone" confirm="Delete" confirmStyle={{backgroundColor: 'var(--color-attention)'}} />
       default:
         if (router.query.index.length > 1) {
           const queryId = router.query.index[1]
@@ -45,4 +45,27 @@ export default function Home() {
       </Modal>
     </>
   )
+}
+
+import axios from 'axios'
+
+export async function getServerSideProps(context) {
+  const defaultPlan = {
+    selectedWeekId: 0,
+    weeks: [{
+        id: 0,
+        name: 'Week 1'
+    }, {
+        id: 1,
+        name: 'Week 2'
+    }]
+  }
+
+  try {
+    const response = await axios.get(`http://${context.req.headers.host}/api/database`, { headers: { cookie: context.req.headers.cookie } })
+    return { props: { ...defaultPlan, ...response.data } }
+  } catch (error) {
+    console.log(error.message)
+    return { props: { ...defaultPlan, message: 'Unable to reach the database. Changes will be stored locally' } }
+  }
 }

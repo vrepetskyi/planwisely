@@ -1,17 +1,33 @@
-import { useSession, signOut } from 'next-auth/client'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/dist/client/router'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import ModalNavigation from './ModalNavigation'
 import Button from './Button'
 import Select from './Select'
 import WeeksList from './WeeksList'
 import styles from '../styles/Settings.module.css'
+import { useModalState } from './Modal'
+import { useGlobalState } from './GlobalState'
 
 export default function Settings() {
-    const [session] = useSession()
+    const { data: session } = useSession()
     const router = useRouter()
-    const [selectedWeekId, setSelectedWeekId] = useState(0)
-    const [weeks, setWeeks] = useState([{ id: 0, name: 'Weeeeeeeeeeeeeeeeeeeek 1' }])
+
+    const [globalState] = useGlobalState()
+    const [state, setState] = useModalState()
+    useEffect(() => setState({
+        weeks: globalState.weeks,
+        selectedWeekId: globalState.selectedWeekId
+    }), [])
+    const setWeeks = (value) => {
+        if (typeof value == 'function') value = value(state.weeks)
+        setState((state) => ({ ...state, weeks: value }))
+    }
+    const setSelectedWeekId = (value) => {
+        if (typeof value == 'function') value = value(state.selectedWeekId)
+        setState((state) => ({ ...state, selectedWeekId: value }))
+    }
+
     return (
         <div id={styles.container}>
             <ModalNavigation title="Settings" />
@@ -24,7 +40,7 @@ export default function Settings() {
                     </div>
                     <div id={styles.actions}>
                         <Button style={{backgroundColor: '#6bace8'}}>Export to Google Calendar</Button>
-                        <Button style={{backgroundColor: '#ea7474'}} onClick={() => router.push('/delete', undefined, { shallow: true })}>Delete plan</Button>
+                        <Button style={{backgroundColor: 'var(--color-attention)'}} onClick={() => router.push('/delete', undefined, { shallow: true })}>Delete plan</Button>
                         <Button style={{backgroundColor: 'rgb(180, 180, 180)'}} onClick={() => signOut('google')}><i className="fas fa-sign-in-alt" /></Button>
                     </div>
                 </div>
@@ -33,9 +49,9 @@ export default function Settings() {
                 <h1>Weeks</h1>
                 <div id={styles.current}>
                     <p>The current week is:</p>
-                    <Select items={weeks} selectedId={selectedWeekId} setSelectedId={setSelectedWeekId} />
+                    <Select items={state.weeks} selectedId={state.selectedWeekId} setSelectedId={setSelectedWeekId} />
                 </div>
-                <WeeksList weeks={weeks} setWeeks={setWeeks} />
+                <WeeksList weeks={state.weeks} setWeeks={setWeeks} />
             </div>
         </div>
     )

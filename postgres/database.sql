@@ -1,10 +1,12 @@
-CREATE TABLE plans (
+CREATE TABLE plans(
     id SERIAL PRIMARY KEY,
-    scope VARCHAR(320) UNIQUE NOT NULL,
-    origin_week_id INT,
-    origin_week_date DATE,
-    weeks VARCHAR(32)[]
+    email VARCHAR(320) NOT NULL UNIQUE,
+    weeks JSON,
+    origin_week_id SMALLINT,
+    origin_date DATE
 );
+
+///////////////////////////////////
 
 CREATE TABLE templates(
     id SERIAL PRIMARY KEY,

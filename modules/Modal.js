@@ -1,15 +1,28 @@
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { useGlobalState } from './GlobalState'
 import styles from '../styles/Modal.module.css'
 
 const transitionDuration = 300
 const style = { transitionDuration: transitionDuration + 'ms' }
 let replaceTimeout, previousContent, isVisible
 
+const ModalStateContext = createContext()
+
+export const useModalState = () => useContext(ModalStateContext)
+
 export default function Modal({ children: targetContent }) {
     const [content, setContent] = useState()
+    const [globalState, setGlobalState] = useGlobalState()
+    const [contentState, setContentState] = useState(globalState)
 
     useEffect(() => {
+        // update global state on modal closure
+        if (previousContent && (content && !targetContent || content == previousContent)) {
+            setGlobalState(contentState)
+        }
+
+        // update modal content
         targetContent ? isVisible = true : isVisible = false
         setContent((content) => {
             if (replaceTimeout) {
@@ -32,11 +45,14 @@ export default function Modal({ children: targetContent }) {
 
     const visibleContent = content || previousContent
     previousContent = visibleContent
+    
     return (
-        <div id={styles.backdrop} className={isVisible ? styles.visible : null} style={style} onClick={handleBackdrop}>
-            <div id={styles.container} className={content ? styles.visible : null} style={style} ref={modalRef}>
-                {visibleContent}
+        <ModalStateContext.Provider value={[contentState, setContentState]}>
+            <div id={styles.backdrop} className={isVisible ? styles.visible : null} style={style} onClick={handleBackdrop}>
+                <div id={styles.container} className={content ? styles.visible : null} style={style} ref={modalRef}>
+                    {visibleContent}
+                </div>
             </div>
-        </div>
+        </ModalStateContext.Provider>
     )
 }

@@ -3,7 +3,7 @@ import Text from "./Text"
 import styles from '../styles/WeeksList.module.css'
 import { useRef } from "react"
 
-let weeks, dragIndex, dragHeight, initialMouseY, initialPositionY, minOffsetY, maxOffsetY, targetIndex
+let weeksChildren, dragIndex, dragHeight, initialMouseY, initialPositionY, minOffsetY, maxOffsetY, targetIndex, transitionTimeout
 export default function WeeksList({ weeks, setWeeks }) {
     const weeksRef = useRef()
 
@@ -12,54 +12,58 @@ export default function WeeksList({ weeks, setWeeks }) {
         const positionY = initialPositionY + offsetY
 
         targetIndex = 0
-        while (positionY > weeks[targetIndex].offsetTop + weeks[targetIndex].offsetHeight / 2) targetIndex++
+        while (positionY > weeksChildren[targetIndex].offsetTop + weeksChildren[targetIndex].offsetHeight / 2) targetIndex++
 
-        for (let i = 0; i < weeks.length; i++) {
+        for (let i = 0; i < weeksChildren.length; i++) {
             if (i == dragIndex) {
-                weeks[i].style.transform = `translateY(${offsetY}px)`
-                weeks[i].style.transition = 'none'
+                weeksChildren[i].style.transform = `translateY(${offsetY}px)`
+                weeksChildren[i].style.transition = 'box-shadow .3s, opacity .3s'
             }
             else {
                 if (i <= targetIndex && i > dragIndex) {
-                    weeks[i].style.transform = `translateY(${-dragHeight}px)`
+                    weeksChildren[i].style.transform = `translateY(${-dragHeight}px)`
                 } else if (i >= targetIndex && i < dragIndex) {
-                    weeks[i].style.transform = `translateY(${dragHeight}px)`
+                    weeksChildren[i].style.transform = `translateY(${dragHeight}px)`
                 } else {
-                    weeks[i].style.transform = 'none'
+                    weeksChildren[i].style.transform = 'none'
                 }
-                weeks[i].style.transition = 'transform .3s'
+                weeksChildren[i].style.transition = 'transform .3s'
             }
         }
     }
 
     const startDrag = (e, index) => {
-        weeks = weeksRef.current.children
-        dragIndex = index
-        dragHeight = weeks[dragIndex].offsetHeight + parseInt(window.getComputedStyle(weeks[dragIndex]).marginTop)
-        initialMouseY = e.clientY
-        initialPositionY = weeks[dragIndex].offsetTop
-        minOffsetY = weeks[0].offsetTop - initialPositionY
-        maxOffsetY = weeks[weeks.length - 1].offsetTop - initialPositionY
+        if (transitionTimeout) return
 
-        weeks[dragIndex].style.transition = 'box-shadow .3s, opacity .3s'
-        weeks[dragIndex].style.boxShadow = '0 0 4px gray'
-        weeks[dragIndex].style.zIndex = 1
+        weeksChildren = weeksRef.current.children
+        dragIndex = index
+        dragHeight = weeksChildren[dragIndex].offsetHeight + parseInt(window.getComputedStyle(weeksChildren[dragIndex]).marginTop)
+        initialMouseY = e.clientY
+        initialPositionY = weeksChildren[dragIndex].offsetTop
+        minOffsetY = weeksChildren[0].offsetTop - initialPositionY
+        maxOffsetY = weeksChildren[weeksChildren.length - 1].offsetTop - initialPositionY
+
+        weeksChildren[dragIndex].style.transition = 'box-shadow .3s, opacity .3s'
+        weeksChildren[dragIndex].style.boxShadow = '0 0 4px gray'
+        weeksChildren[dragIndex].style.zIndex = 1
 
         window.addEventListener('mousemove', registerDrag)
         window.addEventListener('mouseup', endDrag)
+
+        registerDrag(window.event)
     }
 
     const endDrag = () => {
         window.removeEventListener('mouseup', endDrag)
         window.removeEventListener('mousemove', registerDrag)
 
-        weeks[dragIndex].style.transition = 'box-shadow .3s, opacity .3s, z-index 0s .3s, transform .3s'
-        weeks[dragIndex].style.transform = `translateY(${weeks[targetIndex].offsetTop - initialPositionY}px)`
-        weeks[dragIndex].style.boxShadow = '0 0 4px transparent'
-        weeks[dragIndex].style.zIndex = 0
+        weeksChildren[dragIndex].style.transition = 'box-shadow .3s, opacity .3s, z-index 0s .3s, transform .3s'
+        weeksChildren[dragIndex].style.transform = `translateY(${weeksChildren[targetIndex].offsetTop - initialPositionY}px)`
+        weeksChildren[dragIndex].style.boxShadow = '0 0 4px transparent'
+        weeksChildren[dragIndex].style.zIndex = 0
         
-        if (dragIndex != undefined && targetIndex != dragIndex) {
-            setTimeout(() => {
+        if (targetIndex != dragIndex) {
+            transitionTimeout = setTimeout(() => {
                 setWeeks((oldWeeks) => {
                     const weeks = [...oldWeeks]
                     if (targetIndex < dragIndex) {
@@ -71,11 +75,11 @@ export default function WeeksList({ weeks, setWeeks }) {
                     }
                     return weeks
                 })
-                for (let i = 0; i < weeks.length; i++) {
-                    weeks[i].style.transition = 'none'
-                    weeks[i].style.transform = 'none'
+                for (let i = 0; i < weeksChildren.length; i++) {
+                    weeksChildren[i].style.transition = 'none'
+                    weeksChildren[i].style.transform = 'none'
                 }
-                dragIndex = undefined
+                transitionTimeout = undefined
             }, 300)
         }
     }

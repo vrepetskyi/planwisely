@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
 
+:root {
+  --color-attention: #ea7474; 
+}
+
 html,
 body {
   padding: 0;

@@ -5,5 +5,5 @@ export const pg = new Pool({
     ssl: {
         rejectUnauthorized: false,
     },
-    max: 19
+    max: 20
 })
