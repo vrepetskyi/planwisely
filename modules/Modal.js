@@ -18,7 +18,7 @@ export default function Modal({ children: targetContent }) {
 
     useEffect(() => {
         // update global state on modal closure
-        if (previousContent && (content && !targetContent || content == previousContent)) {
+        if (previousContent && (content && !targetContent || content == previousContent) && !(previousContent?.type == content?.type && content?.type == targetContent?.type)) {
             setGlobalState(contentState)
         }
 

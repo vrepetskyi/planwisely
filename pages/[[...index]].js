@@ -69,10 +69,16 @@ export async function getServerSideProps(context) {
     }],
     origin_week_id: 0
   }
-
+  console.log(1)
   try {
     const response = await axios.get(`http://${context.req.headers.host}/api/database`, { headers: { cookie: context.req.headers.cookie } })
-    return { props: { ...defaultPlan, ...response.data } }
+    try {
+      //const plan = JSON.parse(response.data)
+      console.log('from server', response.data)
+      return { props: { ...defaultPlan, ...response.data } }
+    } catch {
+      return { props: defaultPlan }
+    }
   } catch (error) {
     console.log(error.message)
     return { props: { ...defaultPlan, message: 'Unable to reach the database. Changes will be stored locally' } }
