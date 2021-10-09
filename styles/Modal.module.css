@@ -15,7 +15,7 @@
 
 #container {
     max-height: 100%;
-    overflow: scroll;
+    overflow: overlay;
     padding: 20px;
     border-radius: 4px;
     background-color: white;

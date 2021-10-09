@@ -7,25 +7,19 @@ import Select from './Select'
 import WeeksList from './WeeksList'
 import styles from '../styles/Settings.module.css'
 import { useModalState } from './Modal'
-import { useGlobalState } from './GlobalState'
 
 export default function Settings() {
     const { data: session } = useSession()
     const router = useRouter()
 
-    const [globalState] = useGlobalState()
     const [state, setState] = useModalState()
-    useEffect(() => setState({
-        weeks: globalState.weeks,
-        selectedWeekId: globalState.selectedWeekId
-    }), [])
     const setWeeks = (value) => {
         if (typeof value == 'function') value = value(state.weeks)
         setState((state) => ({ ...state, weeks: value }))
     }
-    const setSelectedWeekId = (value) => {
-        if (typeof value == 'function') value = value(state.selectedWeekId)
-        setState((state) => ({ ...state, selectedWeekId: value }))
+    const setOriginWeekId = (value) => {
+        if (typeof value == 'function') value = value(state.origin_week_id)
+        setState((state) => ({ ...state, origin_week_id: value }))
     }
 
     return (
@@ -49,7 +43,7 @@ export default function Settings() {
                 <h1>Weeks</h1>
                 <div id={styles.current}>
                     <p>The current week is:</p>
-                    <Select items={state.weeks} selectedId={state.selectedWeekId} setSelectedId={setSelectedWeekId} />
+                    <Select items={state.weeks} selectedId={state.origin_week_id} setSelectedId={setOriginWeekId} />
                 </div>
                 <WeeksList weeks={state.weeks} setWeeks={setWeeks} />
             </div>

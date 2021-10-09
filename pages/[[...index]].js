@@ -60,14 +60,14 @@ export default function Home() {
 
 export async function getServerSideProps(context) {
   const defaultPlan = {
-    selectedWeekId: 0,
     weeks: [{
         id: 0,
         name: 'Week 1'
     }, {
         id: 1,
         name: 'Week 2'
-    }]
+    }],
+    origin_week_id: 0
   }
 
   try {

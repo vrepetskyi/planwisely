@@ -11,6 +11,7 @@ export const GlobalStateProvider = ({ children, ...props }) => {
     const router = useRouter()
     const changeState = async (newState) => {
         try {
+            console.log(newState)
             await axios.post(`${router.basePath}/api/database`, newState)
         } catch (error) {
             console.log(error.response.data)
