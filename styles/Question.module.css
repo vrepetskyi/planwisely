@@ -1,18 +1,23 @@
 #question {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    justify-content: space-around;
+    width: 280px;
+    min-height: 120px;
     max-width: 100%;
 }
 
-#question p {
+#question > * {
+    margin: 10px;
+}
+
+#question > p {
     font-size: 20px;
     text-align: center;
-    margin: 10px 10px 30px 10px;
 }
 
 #options {
-    margin: -4px;
+    margin: 6px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -24,4 +29,10 @@
     padding: 10px 20px;
     background-color: rgb(180, 180, 180);
     color: white;
+}
+
+.infoItem {
+    text-align: center;
+    font-size: 18px;
+    color: #444;
 }

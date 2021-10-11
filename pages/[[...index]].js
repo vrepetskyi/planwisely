@@ -53,11 +53,14 @@ export default function Home() {
                     return (
                       <Question
                         question='Use local data?'
-                        options={['Apply', 'Cancel']}
+                        info={[
+                          `Weeks: ${JSON.parse(localStorage.plan).weeks.map((week) => week.name).join(', ')}`
+                        ]}
+                        options={['Yes', 'No']}
                         colors={['green']}
                         actions={[
                           () => {
-                            setGlobalState(JSON.parse(localStorage.plan))
+                            setGlobalState({ ...globalState, plan : { ...globalState.plan, ...JSON.parse(localStorage.plan) } })
                             delete localStorage.plan
                             router.replace('/', undefined, { shallow: true })
                           },
@@ -68,15 +71,18 @@ export default function Home() {
                   case 'cloud':
                     return (
                       <Question
-                        question="Use cloud data?"
-                        options={['Apply', 'Cancel']}
-                        colors={['purple']}
+                        question='Use cloud data?'
+                        info={[
+                          `Weeks: ${globalState.plan.weeks.map((week) => week.name).join(', ')}`
+                        ]}
+                        options={['No', 'Yes']}
+                        colors={[undefined, 'purple']}
                         actions={[
+                          () => router.push('/source/', undefined, { shallow: true }),
                           () => {
                             delete localStorage.plan
                             router.replace('/', undefined, { shallow: true })
-                          },
-                          () => router.push('/source/', undefined, { shallow: true })
+                          }
                         ]}
                       />
                     )
@@ -84,6 +90,7 @@ export default function Home() {
                     return (
                       <Question
                         question='Which source to use?'
+                        info={["You'll see a preview"]}
                         options={['Local', 'Cloud']}
                         colors={['green', 'purple']}
                         actions={[
@@ -116,7 +123,7 @@ export default function Home() {
 export async function getServerSideProps(context) {
   try {
     const response = await axios.get(`http://${context.req.headers.host}/api/database`, { headers: { cookie: context.req.headers.cookie } })
-    if (response.data instanceof Object) return { props: { ...response.data } }
+    if (response.data instanceof Object) return { props: { plan: { ...response.data } } }
     else return { props: { message: response.data } }
   } catch (error) {
     console.log(error.message)

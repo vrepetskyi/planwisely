@@ -22,28 +22,28 @@ export const GlobalStateProvider = ({ children, message, plan, error }) => {
     const [state, setState] = useState({ message, error, plan: { ...defaultPlan, ...plan } })
     const router = useRouter()
     const { status } = useSession()
+    
+    const changeState = async (newState) => {
+        setState(newState)
+        try {
+            if (status == 'authenticated') await axios.post(`${router.basePath}/api/database`, newState.plan)
+            else if (status == 'unauthenticated') localStorage.setItem('plan', JSON.stringify(newState.plan))
+        } catch (error) {
+            console.log(error.response?.data)
+            if (error.response?.status == 502) localStorage.setItem('plan', JSON.stringify(newState.plan))
+            else router.reload()
+        }
+    }
 
     // pull plan from local storage if not authorized or cloud is empty
     useEffect(() => {
-        if ('plan' in localStorage && (status == 'unauthenticated' || status == 'authenticated' && !plan)) {
-            setState(JSON.parse(localStorage.plan))
+        if (localStorage.plan && (status == 'unauthenticated' || status == 'authenticated' && !plan)) {
+            changeState({ ...state, plan : { ...state.plan, ...JSON.parse(localStorage.plan) } })
             delete localStorage.plan
+            router.replace('/', undefined, { shallow: true })
         }
     }, [status])
 
-    const changeState = async (newState) => {
-        try {
-            console.log(state, newState)
-            if (status == 'authenticated') await axios.post(`${router.basePath}/api/database`, newState)
-            else if (status == 'unauthenticated') localStorage.setItem('plan', JSON.stringify(newState))
-        } catch (error) {
-            console.log(error.response?.data)
-            if (error.response?.status == 502) localStorage.setItem('plan', newState)
-            else router.reload()
-        }
-        setState(newState)
-    }
-    
     return (
         <GlobalStateContext.Provider value={[state, changeState]}>
             { children }

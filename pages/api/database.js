@@ -3,6 +3,7 @@ import { pg } from '../../postgres'
 
 let i = 0
 export default async (req, res) => {
+  //console.log(req.body, req.headers.cookie)
   const session = await getSession({ req })
   try {
     const planRequest = await pg.query('SELECT * FROM plans WHERE email = $1', [session?.user.email])
@@ -39,6 +40,7 @@ export default async (req, res) => {
                     return false
                 }
               }))
+              console.log(parsedRequestBody)
               if ('weeks' in parsedRequestBody) { // parse origin week
                 if (parsedRequestBody.weeks.findIndex(week => week.id == req.body?.origin_week_id) != -1)
                   parsedRequestBody.origin_week_id = parseInt(req.body.origin_week_id)
