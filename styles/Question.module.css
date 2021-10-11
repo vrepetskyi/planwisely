@@ -11,14 +11,14 @@
     margin: 10px 10px 30px 10px;
 }
 
-#choise {
+#options {
     margin: -4px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.button {
+#options button {
     margin: 4px;
     font-size: 18px;
     padding: 10px 20px;

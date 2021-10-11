@@ -16,7 +16,7 @@ export default function Header() {
                 <h1>planwisely</h1>
             </div>
             {
-                globalState.message ? <p id={styles.alert} style={{color: 'var(--color-attention)'}}>{globalState.message}</p> :
+                globalState.error ? <p id={styles.alert} style={{color: 'var(--color-attention)'}}>{globalState.error}</p> :
                 !session && <p id={styles.alert}>Change anything. <Button onClick={() => signIn('google')}>Sign in</Button> to save</p>
             }
             <div id={styles.actions}>

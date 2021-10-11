@@ -14,12 +14,12 @@ export default function Settings() {
 
     const [state, setState] = useModalState()
     const setWeeks = (value) => {
-        if (typeof value == 'function') value = value(state.weeks)
-        setState((state) => ({ ...state, weeks: value }))
+        if (typeof value == 'function') value = value(state.plan.weeks)
+        setState((state) => ({ ...state, plan: { ...state.plan, weeks: value } }))
     }
     const setOriginWeekId = (value) => {
-        if (typeof value == 'function') value = value(state.origin_week_id)
-        setState((state) => ({ ...state, origin_week_id: value }))
+        if (typeof value == 'function') value = value(state.plan.origin_week_id)
+        setState((state) => ({ ...state, plan: { ...state.plan, origin_week_id: value } }))
     }
 
     return (
@@ -43,9 +43,9 @@ export default function Settings() {
                 <h1>Weeks</h1>
                 <div id={styles.current}>
                     <p>The current week is:</p>
-                    <Select items={state.weeks} selectedId={state.origin_week_id} setSelectedId={setOriginWeekId} />
+                    <Select items={state.plan.weeks} selectedId={state.plan.origin_week_id} setSelectedId={setOriginWeekId} />
                 </div>
-                <WeeksList weeks={state.weeks} setWeeks={setWeeks} />
+                <WeeksList weeks={state.plan.weeks} setWeeks={setWeeks} />
             </div>
         </div>
     )

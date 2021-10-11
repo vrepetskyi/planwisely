@@ -25,7 +25,7 @@
 #backdrop, #container {
     pointer-events: none;
     opacity: 0;
-    transition-property: opacity;
+    transition: opacity .3s, background-color .3s;
 }
 
 #backdrop.visible, #container.visible {
