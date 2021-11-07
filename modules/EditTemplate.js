@@ -24,21 +24,20 @@ export default function EditTemplate({ id }) {
                 </div>
                 <div id={styles.duration}>
                     <span>Duration:</span>
-                    <TimeInput time={plan.templates[index].duration || 0} setTime={(value) => {
-                        const templates = plan.templates
-                        templates[index].duration = value
+                    <TimeInput time={plan?.templates[index]?.duration} setTime={(value) => {
+                        let templates = plan.templates
+                        if (templates[index]) templates[index].duration = value
                         setPlan({ ...plan, templates })
                     }} maxTime="720" buttons />
                 </div>
-                {plan.templates[index].snaps && <div id={styles.snaps}>
+                <div id={styles.snaps}>
                     <span>Snaps:</span>
-                    {plan.templates[index].snaps.map((snap, i) => (
+                    {plan?.templates[index]?.snaps && plan.templates[index].snaps.map((snap, i) => (
                         <div key={i}>
                             <TimeInput time={snap} setTime={(value) => {
                                 const snaps = plan.templates[index].snaps
                                 snaps[i] = value
-                                snaps.sort()
-                                setPlan({ ...plan, snaps })
+                                setPlan({ ...plan, snaps: snaps.sort((a, b) => a - b) })
                             }} maxTime="1439" />
                             <Button onClick={() => {
                                 const snaps = plan.templates[index].snaps
@@ -48,11 +47,11 @@ export default function EditTemplate({ id }) {
                         </div>
                     ))}
                     <Button onClick={() => {
-                        const snaps = plan.templates[index].snaps
+                        const snaps = plan?.templates[index]?.snaps || []
                         snaps.unshift(0)
                         setPlan({ ...plan, snaps })
                     }}><i className="fas fa-plus" /></Button>
-                </div>}
+                </div>
             </div>
             <Actions>
                 <Button hoverColor="rgb(0, 0, 0, .8)" onClick={() => router.push('/', undefined, { shallow: true })}>Ok</Button>

@@ -21,13 +21,13 @@ export default function TimeInput({ time, setTime, maxTime, buttons }) {
         <div id={styles.container}>
             <div className={styles.block}>
                 {buttons && <Button onClick={() => setTime(parseInt(time) + 60)}><i className="fas fa-caret-up" /></Button>}
-                <Text maxlength="3" value={hours} setValue={(value) => setTime(value * 60 + (parseInt(minutes) || 0))} validator={(value) => value % 1 == 0 || value == '-' } format={makeTwoDigit} select updateOnBlur />
+                <Text maxlength="3" value={hours || 0} setValue={(value) => setTime(value * 60 + (parseInt(minutes) || 0))} validator={(value) => value % 1 == 0 || value == '-' } format={makeTwoDigit} select updateOnBlur />
                 {buttons && <Button onClick={() => setTime(parseInt(time) - 60)}><i className="fas fa-caret-down" /></Button>}
             </div>
             <span>:</span>
             <div className={styles.block}>
                 {buttons && <Button onClick={() => setTime(parseInt(time) + 1)}><i className="fas fa-caret-up" /></Button>}
-                <Text maxlength="5" value={minutes} setValue={(value) => setTime(hours * 60 + (parseInt(value) || 0))} validator={(value) => value % 1 == 0 || value == '-' } format={makeTwoDigit} select updateOnBlur />
+                <Text maxlength="5" value={minutes || 0} setValue={(value) => setTime(hours * 60 + (parseInt(value) || 0))} validator={(value) => value % 1 == 0 || value == '-' } format={makeTwoDigit} select updateOnBlur />
                 {buttons && <Button onClick={() => setTime(parseInt(time) - 1)}><i className="fas fa-caret-down" /></Button>}
             </div>
         </div>

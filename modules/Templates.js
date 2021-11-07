@@ -16,16 +16,16 @@ export default function Templates() {
                     onClick={() => router.push('/template/' + template?.id, undefined, { shallow: true })}>
                     <p>{template.name}</p>
                     <p>
-                        {template.duration && `${Math.floor(template.duration / 60)}h ${template.duration % 60}m`}
-                        {template.duration && template.snaps && ' | '}
-                        {template.snaps && template.snaps.map((snap) => makeTwoDigit(Math.floor(snap / 60)) + ':' + makeTwoDigit(snap % 60)).join(' ')}
+                        {template.duration ? `${Math.floor(template.duration / 60)}h ${template.duration % 60}m` : null}
+                        {template.duration && template.snaps.length ? ' | ' : null}
+                        {template.snaps.length ? template.snaps.map((snap) => makeTwoDigit(Math.floor(snap / 60)) + ':' + makeTwoDigit(snap % 60)).join(' ') : null}
                     </p>
                 </Button>
             ))}
             <Button id={styles.add} onClick={() => {
                 let id = 0
                 while (plan.templates.find(template => template.id == id)) id++
-                setPlan({ ...plan, templates: [...plan.templates, { id, name: 'New Template' }] })
+                setPlan({ ...plan, templates: [...plan.templates, { id, name: 'New Template', duration: 0, snaps: [] }] })
                 router.push('/template/' + id, undefined, { shallow: true })
             }
             }><i className="fas fa-plus" /></Button>

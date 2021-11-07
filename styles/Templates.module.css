@@ -10,7 +10,9 @@
     border-radius: 8px;
     background-color: orange;
     color: #222;
-    min-width: min-content;
+    width: fit-content;
+    max-width: 140px;
+    flex-shrink: 0;
     margin: 4px;
     display: flex;
     flex-direction: column;
@@ -18,7 +20,7 @@
 
 .template p {
     font-size: 18px;
-    max-width: 150px;
+    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
 }

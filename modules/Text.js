@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styles from '../styles/Text.module.css'
 
 let validationErrorTimeout, lastValue
-export default function Text({ value, setValue, maxlength, validator, format: modify, select, updateOnBlur }) {
+export default function Text({ value = '', setValue, maxlength, validator, format: modify, select, updateOnBlur }) {
     const valid = (value) => !(value.length > maxlength || value.toString().includes('  ') || value.toString()[0] == ' ' || (typeof validator === 'function' && !validator(value)))
     const format = (value) => typeof modify == 'function' ? modify(value.toString().trim()) : value.toString().trim()
     
