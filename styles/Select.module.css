@@ -3,6 +3,7 @@
 }
 
 #select button {
+    text-align: center;
     font-size: 20px;
     text-overflow: ellipsis;
 }

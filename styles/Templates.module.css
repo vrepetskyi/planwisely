@@ -1,0 +1,41 @@
+#container {
+    display: flex;
+    padding: 4px;
+    background-color: #F8F8F8;
+    overflow-x: scroll;
+}
+
+.template{
+    padding: 8px;
+    border-radius: 8px;
+    background-color: orange;
+    color: #222;
+    min-width: min-content;
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.template p {
+    font-size: 18px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.template p:first-of-type {
+    white-space: nowrap;
+}
+
+.template p:not(.template p:first-of-type) {
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+#add {
+    margin: 4px;
+    flex-shrink: 0;
+    align-self: center;
+}

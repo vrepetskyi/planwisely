@@ -1,0 +1,13 @@
+#actions {
+    display: flex;
+    margin: 10px -10px -10px -10px;
+}
+
+#actions button {
+    flex: 1;
+    text-align: center;
+    border-radius: 8px;
+    color: #222;
+    background-color: #F4F4F4;
+    margin: 10px;
+}

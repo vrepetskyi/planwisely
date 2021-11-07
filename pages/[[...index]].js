@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import Settings from '../modules/Settings'
 import Question from '../modules/Question'
+import EditTemplate from '../modules/EditTemplate'
 import Head from 'next/head'
-import Header from '../modules/Header'
+import Plan from '../modules/Plan'
 import Modal from '../modules/Modal'
 import axios from 'axios'
 import { useGlobalState } from '../modules/GlobalState'
@@ -12,7 +13,7 @@ import { useGlobalState } from '../modules/GlobalState'
 export default function Home() {
   const router = useRouter()
   const { data: session, status } = useSession()
-  const [globalState, setGlobalState] = useGlobalState()
+  const { state, setState, plan } = useGlobalState()
 
   const [modal, setModal] = useState()
   useEffect(() => {
@@ -30,7 +31,8 @@ export default function Home() {
             case 'delete':
               if (session) return (
                 <Question
-                  question='Delete the plan? Action cannot be undone'
+                  question='Delete the plan?'
+                  info={['Action cannot be undone']}
                   options={['Delete', 'Cancel']}
                   colors={['#F44']}
                   actions={[
@@ -54,13 +56,14 @@ export default function Home() {
                       <Question
                         question='Use local data?'
                         info={[
+                          `Templates: ${JSON.parse(localStorage.plan).templates.map((template) => template.name).join(', ')}`,
                           `Weeks: ${JSON.parse(localStorage.plan).weeks.map((week) => week.name).join(', ')}`
                         ]}
                         options={['Yes', 'No']}
                         colors={['green']}
                         actions={[
                           () => {
-                            setGlobalState({ ...globalState, plan : { ...globalState.plan, ...JSON.parse(localStorage.plan) } })
+                            setState({ ...state, plan : { ...state.plan, ...JSON.parse(localStorage.plan) } })
                             delete localStorage.plan
                             router.replace('/', undefined, { shallow: true })
                           },
@@ -73,7 +76,8 @@ export default function Home() {
                       <Question
                         question='Use cloud data?'
                         info={[
-                          `Weeks: ${globalState.plan.weeks.map((week) => week.name).join(', ')}`
+                          `Templates: ${plan.templates.map((template) => template.name).join(', ')}`,
+                          `Weeks: ${plan.weeks.map((week) => week.name).join(', ')}`
                         ]}
                         options={['No', 'Yes']}
                         colors={[undefined, 'purple']}
@@ -100,11 +104,15 @@ export default function Home() {
                       />
                     )
                 }
+            case 'template':
+              if (router.query.index.length > 1 && plan.templates.find(template => template.id == router.query.index[1]))
+                return <EditTemplate id={router.query.index[1]} />
           }
         })(),
         canClose: !(targetLocation || status == 'loading')
       })
     }
+    if (status == 'unauthenticated') setState({ ...state, editing: true })
   }, [status, router.asPath])
   
   if (status == 'loading') return null
@@ -112,9 +120,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>planwisely</title>
+        <title>planwisely{status == 'authenticated' ? ` - ${session.user.name}` : null}</title>
       </Head>
-      <Header />
+      <Plan />
       <Modal content={modal?.content} canClose={modal?.canClose} />
     </>
   )

@@ -113,7 +113,7 @@ export default function WeeksList({ weeks, setWeeks }) {
                     )
                 })}
             </div>
-            {weeks.length < 4 && <Button style={{marginTop: '10px'}} onClick={() => changeWeek()}><i className="fas fa-plus" /></Button>}
+            {weeks.length < 4 && <Button style={{margin: '10px'}} onClick={() => changeWeek()}><i className="fas fa-plus" /></Button>}
         </div>
     )
 }

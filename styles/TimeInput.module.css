@@ -1,0 +1,28 @@
+#container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#container span {
+    font-size: 20px;
+    margin: 0 8px;
+}
+
+.block button {
+    height: 30px;
+    width: 30px;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.block input {
+    text-align: center;
+    width: 30px;
+    font-size: 20px;
+    padding: 2px;
+}

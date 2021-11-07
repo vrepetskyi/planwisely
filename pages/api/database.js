@@ -1,9 +1,7 @@
 import { getSession } from 'next-auth/react'
 import { pg } from '../../postgres'
 
-let i = 0
 export default async (req, res) => {
-  //console.log(req.body, req.headers.cookie)
   const session = await getSession({ req })
   try {
     const planRequest = await pg.query('SELECT * FROM plans WHERE email = $1', [session?.user.email])
@@ -19,6 +17,24 @@ export default async (req, res) => {
               const parsedRequestBody = Object.fromEntries(Object.entries(req.body).filter(([key, value]) => {
                 if (!value) return false // filter null values
                 switch (key) { // filter key names
+                  case 'templates':
+                    const templateIds = []
+                    return (
+                      value.every(template => { // validate each template
+                        if (
+                          Number.isInteger(template.id) && template.id >= 0 && // id >= 0
+                          templateIds.indexOf(template.id) == -1 && // id is unique
+                          template.name.length <= 32 && // name not longer than 32
+                          !template.name.includes('  ') && // no double spaces
+                          template.name[0] != ' ' && template.name[template.name.length - 1] != ' ' && // no spaces at the start and end of name 
+                          (!template.duration || Number.isInteger(template.duration) && template.duration >= 0 && template.duration <= 720) && // validate duration
+                          (!template.snaps || template.snaps.every((snap) => Number.isInteger(snap) && snap >= 0 && snap < 1440)) // validate each snap
+                        ) {
+                          templateIds.push(template.id) // push validated week id
+                          return true
+                        }
+                        else return false
+                      }))
                   case 'weeks':
                     const weekIds = []
                     return (
@@ -40,7 +56,6 @@ export default async (req, res) => {
                     return false
                 }
               }))
-              console.log(parsedRequestBody)
               if ('weeks' in parsedRequestBody) { // parse origin week
                 if (parsedRequestBody.weeks.findIndex(week => week.id == req.body?.origin_week_id) != -1)
                   parsedRequestBody.origin_week_id = parseInt(req.body.origin_week_id)
@@ -48,9 +63,8 @@ export default async (req, res) => {
                   parsedRequestBody.origin_week_id = parsedRequestBody.weeks[0].id
               }
               try { // update plan
-                if ('weeks' in parsedRequestBody) {
-                  await pg.query('UPDATE plans SET weeks = $1, origin_week_id = $2, origin_date = CURRENT_DATE WHERE id = $3', [JSON.stringify(parsedRequestBody.weeks), parsedRequestBody.origin_week_id, plan.id])
-                }
+                await pg.query('UPDATE plans SET weeks = $1, origin_week_id = $2, origin_date = CURRENT_DATE, templates = $3 WHERE id = $4', [JSON.stringify(parsedRequestBody.weeks), parsedRequestBody.origin_week_id, JSON.stringify(parsedRequestBody.templates), plan.id])
+                //res.status(201).json(parsedRequestBody)
                 res.status(201).send('Plan was updated')
               } catch (error) {
                 console.log(error)

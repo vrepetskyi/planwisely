@@ -2,38 +2,47 @@ import { useRouter } from 'next/dist/client/router'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useGlobalState } from './GlobalState'
 import styles from '../styles/Modal.module.css'
-import { useSession } from 'next-auth/react'
 
 let replaceTimeout, errorTimeout, previousContent, isVisible
 
-const ModalStateContext = createContext()
+const ModalPlanContext = createContext()
 
-export const useModalState = () => useContext(ModalStateContext)
+export const useModalPlan = () => useContext(ModalPlanContext)
 
-let lastContent
 export default function Modal({ content: targetContent, canClose }) {
     const router = useRouter()
     const [content, setContent] = useState()
-    const [globalState, setGlobalState] = useGlobalState()
-    const [contentState, setContentState] = useState(globalState)
-    const { status } = useSession()
+    const { plan, setPlan } = useGlobalState()
+    const [contentPlan, setContentPlan] = useState(plan)
 
     // save state before unload
     const handleBeforeUnload = () => {
-        setGlobalState(contentState)
+        setPlan(contentPlan)
         window.removeEventListener('beforeunload', () => handleBeforeUnload)
     }
     useEffect(() => {
         window.addEventListener('beforeunload', () => handleBeforeUnload)
         return () => window.removeEventListener('beforeunload', () => handleBeforeUnload)
-    }, [contentState])
+    }, [contentPlan])
 
-    // reinit contentState on globalState change
-    useEffect(() => contentState != globalState && setContentState(globalState), [globalState])
+    const handleKeydown = (e) => {
+        if (canClose && (e.key == 'Enter' || e.key == 'Escape')) {
+            document.activeElement.blur()
+            router.push('/', undefined, { shallow: true })
+        }
+    }
 
     useEffect(() => {
-        // update globalState on modal closure
-        if (content && targetContent != content && globalState != contentState && canClose) setGlobalState(contentState)
+        window.addEventListener('keydown', handleKeydown)
+        return () => window.removeEventListener('keydown', handleKeydown)
+    }, [canClose])
+
+    // reinit local plan on global plan change
+    useEffect(() => setContentPlan(plan), [plan])
+
+    useEffect(() => {
+        // update global plan on modal closure
+        if (content && targetContent != content && canClose) setPlan(contentPlan)
 
         // update modal content
         targetContent ? isVisible = true : isVisible = false
@@ -68,12 +77,12 @@ export default function Modal({ content: targetContent, canClose }) {
     previousContent = visibleContent
     
     return (
-        <ModalStateContext.Provider value={[contentState, setContentState]}>
+        <ModalPlanContext.Provider value={[contentPlan, setContentPlan]}>
             <div id={styles.backdrop} className={isVisible ? styles.visible : null} onClick={handleBackdrop} ref={backdropRef}>
                 <div id={styles.container} className={content ? styles.visible : null}>
                     {visibleContent}
                 </div>
             </div>
-        </ModalStateContext.Provider>
+        </ModalPlanContext.Provider>
     )
 }

@@ -1,0 +1,69 @@
+#inputs > * {
+    padding: 10px;
+}
+
+#inputs {
+    display: flex;
+    flex-direction: column;
+    margin: -10px;
+}
+
+#inputs > div {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+#inputs > div > span {
+    font-size: 20px;
+}
+
+#name input {
+    width: 100%;
+}
+
+#duration > div {
+    margin: auto;
+    padding: 0 20px;
+}
+
+#snaps {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
+    margin: -10px;
+    box-sizing: content-box;
+    justify-content: center;
+}
+
+#snaps > * {
+    margin: 10px;
+}
+
+#snaps > div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+#snaps > div > div {
+    flex: 1;
+    padding: 4px 16px;
+    border-radius: 50px;
+    border: 2px solid gray;
+}
+
+#snaps > div > button {
+    margin-left: 4px;
+    height: 30px;
+    width: 30px;
+    color: gray;
+}
+
+#snaps > div > button > i {
+    font-size: 16px;
+}
+
+#snaps > button {
+    color: gray;
+}
