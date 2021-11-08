@@ -130,7 +130,7 @@ export default function Home() {
 
 export async function getServerSideProps(context) {
   try {
-    const response = await axios.get(`http://${context.req.headers.host}/api/database`, { headers: { cookie: context.req.headers.cookie } })
+    const response = await axios.get(`http://${context.req.headers.host}/api/database`, { headers: { cookie: context.req.headers.cookie || null } })
     if (response.data instanceof Object) return { props: { plan: { ...response.data } } }
     else return { props: { message: response.data } }
   } catch (error) {
