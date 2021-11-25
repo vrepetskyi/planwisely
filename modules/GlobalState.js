@@ -21,7 +21,7 @@ const defaultPlan = {
         snaps: [1080, 1140, 1200]
     }, {
         id: 3,
-        name: 'Work at DataArt',
+        name: 'Work',
         duration: 480,
         snaps: [600, 660, 720]
     }],
