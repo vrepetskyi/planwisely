@@ -1,6 +1,9 @@
 # planwisely
 A time planing Pet-Project
 
+- Next.js
+- Postgres
+
 https://planwisely.herokuapp.com/
 
 - all components are self-written
