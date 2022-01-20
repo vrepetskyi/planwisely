@@ -1,5 +1,4 @@
-# planwisely
-A time planing Pet-Project
+# Time planing app
 
 - Next.js
 - Postgres
