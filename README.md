@@ -13,7 +13,7 @@ It is my React / Next pet-project. All components are self-written.
 - local storage usage for unauthorized users
 - OAuth2 for cloud data storage
 
-Some UI highlights
+Some UI highlights below
 
 <table>
   <tr>
