@@ -1,4 +1,4 @@
-# [planwisely](https://planwisely.herokuapp.com/) - a time planning app
+# [***planwisely***](https://planwisely.herokuapp.com/) - a time planning app
 It is my React / Next pet-project. All components are self-written.
 
 ## Technologies:
